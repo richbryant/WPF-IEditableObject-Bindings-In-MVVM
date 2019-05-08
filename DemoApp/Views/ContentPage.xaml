@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="DemoApp.Views.ContentPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid Style="{StaticResource ContentRoot}">
+
+        <StackPanel>
+            <mui:BBCodeBlock BBCode="[b]A quick &amp; dirty demonstration of Editable Bindings.[/b]" />
+            <mui:BBCodeBlock> |</mui:BBCodeBlock>
+            <TextBox Text="{Binding Contact.Name}"/><TextBox Text="{Binding Contact.Irrelevant}"/><TextBox Text="{Binding Contact.Sensible}"/>
+            <Button Content="OK" Command="{Binding OkCommand}"/>
+            <Button Content="Cancel" Command="{Binding CancelCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

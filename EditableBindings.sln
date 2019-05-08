@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditableBindings", "EditableBindings\EditableBindings.csproj", "{29D78916-F162-425E-89D1-F4ADD9EDFD60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoApp", "DemoApp\DemoApp.csproj", "{5DD4DB0A-F82C-4040-A58A-275CD2F49C31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{29D78916-F162-425E-89D1-F4ADD9EDFD60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29D78916-F162-425E-89D1-F4ADD9EDFD60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29D78916-F162-425E-89D1-F4ADD9EDFD60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DD4DB0A-F82C-4040-A58A-275CD2F49C31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DD4DB0A-F82C-4040-A58A-275CD2F49C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DD4DB0A-F82C-4040-A58A-275CD2F49C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DD4DB0A-F82C-4040-A58A-275CD2F49C31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

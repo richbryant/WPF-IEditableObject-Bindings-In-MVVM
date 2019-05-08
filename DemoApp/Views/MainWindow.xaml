@@ -1,0 +1,11 @@
+﻿<mui:ModernWindow x:Class="DemoApp.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        Title="{Binding Title}" 
+        ContentSource="/../Views/ContentPage.xaml"
+        Height="350" Width="525">
+    
+</mui:ModernWindow>
