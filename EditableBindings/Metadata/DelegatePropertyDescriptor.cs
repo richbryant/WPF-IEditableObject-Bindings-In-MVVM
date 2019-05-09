@@ -5,10 +5,9 @@ namespace EditableBindings.Metadata
 {
     internal class DelegatePropertyDescriptor : PropertyDescriptor
     {
-        private Func<object, object> _getValueCallback;
-        private Action<object, object> _setValueCallback;
-        private Type _componentType;
-        private Type _propertyType;
+        private readonly Func<object, object> _getValueCallback;
+        private readonly Action<object, object> _setValueCallback;
+        private readonly Type _componentType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegatePropertyDescriptor"/> class.
@@ -24,7 +23,7 @@ namespace EditableBindings.Metadata
             _getValueCallback = getValueCallback;
             _setValueCallback = setValueCallback;
             _componentType = componentType;
-            _propertyType = propertyType;
+            PropertyType = propertyType;
         }
 
         /// <summary>
@@ -67,7 +66,7 @@ namespace EditableBindings.Metadata
         /// </summary>
         /// <value></value>
         /// <returns>A <see cref="T:System.Type"/> that represents the type of the property.</returns>
-        public override Type PropertyType => _propertyType;
+        public override Type PropertyType { get; }
 
         /// <summary>
         /// When overridden in a derived class, resets the value for this property of the component to the default value.

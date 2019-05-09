@@ -15,10 +15,10 @@ namespace EditableBindings.Metadata
     internal sealed class DelegatePropertyWriter<TInstance, TProperty> : 
         IDelegatePropertyWriter
     {
-        private Action<TInstance, TProperty> _setValueDelegate;
+        private readonly Action<TInstance, TProperty> _setValueDelegate;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegatePropertyWriter"/> class.
+        /// Initializes a new instance of the DelegatePropertyWriter class.
         /// </summary>
         /// <param name="setValueDelegate">The set value delegate.</param>
         public DelegatePropertyWriter(Action<TInstance, TProperty> setValueDelegate)

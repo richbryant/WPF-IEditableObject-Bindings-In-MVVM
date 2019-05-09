@@ -16,10 +16,10 @@ namespace EditableBindings.Metadata
     internal class DelegatePropertyReader<TInstance, TProperty> : 
         IDelegatePropertyReader
     {
-        private Func<TInstance, TProperty> _getValueDelegate;
+        private readonly Func<TInstance, TProperty> _getValueDelegate;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegatePropertyReader"/> class.
+        /// Initializes a new instance of the DelegatePropertyReader class.
         /// </summary>
         /// <param name="getValueDelegate"></param>
         public DelegatePropertyReader(Func<TInstance, TProperty> getValueDelegate)

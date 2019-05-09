@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using EditableBindings.Metadata;
@@ -12,9 +11,9 @@ namespace EditableBindings
         IEditableObject,
         IEditable
     {
-        private TWrappedObject _current;
-        private Dictionary<PropertyInfo, object> _changedProperties;
-        private TypeMetaData _metaData;
+        private readonly TWrappedObject _current;
+        private readonly Dictionary<PropertyInfo, object> _changedProperties;
+        private readonly TypeMetaData _metaData;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EditableAdapter&lt;TWrappedObject&gt;"/> class.
@@ -30,18 +29,12 @@ namespace EditableBindings
         /// <summary>
         /// Gets the current item.
         /// </summary>
-        public TWrappedObject WrappedInstance
-        {
-            get { return _current; }
-        }
+        public TWrappedObject WrappedInstance => _current;
 
         /// <summary>
         /// Gets the current item.
         /// </summary>
-        object IEditable.WrappedInstance
-        {
-            get { return _current; }
-        }
+        object IEditable.WrappedInstance => _current;
 
         /// <summary>
         /// Occurs when a property value changes.
@@ -51,10 +44,7 @@ namespace EditableBindings
         /// <summary>
         /// Gets a value indicating whether this instance has changes.
         /// </summary>
-        public bool HasChanges
-        {
-            get { return _changedProperties.Count > 0; }
-        }
+        public bool HasChanges => _changedProperties.Count > 0;
 
         /// <summary>
         /// Begins an edit on an object.
@@ -69,10 +59,7 @@ namespace EditableBindings
         public void CancelEdit()
         {
             _changedProperties.Clear();
-            if (_metaData != null)
-            {
-                _metaData.AllKnownProperties.ForEach(p => OnPropertyChanged(new PropertyChangedEventArgs(p.Name)));
-            }
+            _metaData?.AllKnownProperties.ForEach(p => OnPropertyChanged(new PropertyChangedEventArgs(p.Name)));
             OnPropertyChanged(new PropertyChangedEventArgs("HasChanges"));
         }
 
@@ -81,25 +68,22 @@ namespace EditableBindings
         /// </summary>
         public void EndEdit()
         {
-            if (_metaData != null)
+            if (_metaData == null) return;
+            foreach (var property in _changedProperties)
             {
-                foreach (KeyValuePair<PropertyInfo, object> property in _changedProperties)
+                if (property.Key.CanWrite)
                 {
-                    if (property.Key.CanWrite)
-                    {
-                        _metaData.PropertyWriters[property.Key].SetValue(_current, property.Value);
-                    }
+                    _metaData.PropertyWriters[property.Key].SetValue(_current, property.Value);
                 }
-                _changedProperties.Clear();
-                _metaData.AllKnownProperties.ForEach(p => OnPropertyChanged(new PropertyChangedEventArgs(p.Name)));
-                OnPropertyChanged(new PropertyChangedEventArgs("HasChanges"));
             }
+            _changedProperties.Clear();
+            _metaData.AllKnownProperties.ForEach(p => OnPropertyChanged(new PropertyChangedEventArgs(p.Name)));
+            OnPropertyChanged(new PropertyChangedEventArgs("HasChanges"));
         }
 
         /// <summary>
         /// Reads the property.
         /// </summary>
-        /// <param name="instance">The instance.</param>
         /// <param name="property">The property.</param>
         /// <returns></returns>
         object IEditable.ReadProperty(PropertyInfo property)
@@ -107,14 +91,7 @@ namespace EditableBindings
             object result = null;
             if (property.CanRead)
             {
-                if (_changedProperties.ContainsKey(property))
-                {
-                    result = _changedProperties[property];
-                }
-                else
-                {
-                    result = _metaData.PropertyReaders[property].GetValue(_current);
-                }
+                result = _changedProperties.ContainsKey(property) ? _changedProperties[property] : _metaData.PropertyReaders[property].GetValue(_current);
             }
             return result;
         }
@@ -122,7 +99,6 @@ namespace EditableBindings
         /// <summary>
         /// Writes the property.
         /// </summary>
-        /// <param name="instance">The instance.</param>
         /// <param name="property">The property.</param>
         /// <param name="value">The value.</param>
         void IEditable.WriteProperty(PropertyInfo property, object value)
@@ -150,28 +126,6 @@ namespace EditableBindings
 
                 OnPropertyChanged(new PropertyChangedEventArgs(property.Name));
                 OnPropertyChanged(new PropertyChangedEventArgs("HasChanges"));
-            }
-        }
-
-        /// <summary>
-        /// Gets the edited value of a property, even if the value has not yet been committed to the underlying item.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns></returns>
-        protected object ReadUncommitted(string propertyName)
-        {
-            PropertyInfo property = WrappedInstance.GetType().GetProperty(propertyName);
-            if (property != null)
-            {
-                return ((IEditable)this).ReadProperty(property);
-            }
-            else
-            {
-                throw new Exception(string.Format("{0}.ReadUncommitted was called for property '{1}' which could not be found on the object '{2}'",
-                    GetType().Name, 
-                    propertyName,
-                    WrappedInstance
-                    ));
             }
         }
 

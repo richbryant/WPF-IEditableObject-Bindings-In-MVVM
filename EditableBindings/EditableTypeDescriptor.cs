@@ -7,18 +7,17 @@ namespace EditableBindings
 {
     public sealed class EditableTypeDescriptor : CustomTypeDescriptor
     {
-        private TypeMetaData _context;
+        private readonly TypeMetaData _context;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DesignTimeTypeDescriptor"/> class.
+        /// Initializes a new instance of the DesignTimeTypeDescriptor class.
         /// </summary>
         /// <param name="objectType">Type of the object.</param>
-        /// <param name="instance">The instance.</param>
         public EditableTypeDescriptor(Type objectType)
         {
-            Type wrapperObjectType = objectType;
-            Type wrappedObjectType = objectType;
-            Type baseType = wrapperObjectType.BaseType;
+            var wrapperObjectType = objectType;
+            var wrappedObjectType = objectType;
+            var baseType = wrapperObjectType.BaseType;
             while (baseType != null && baseType != typeof(object))
             {
                 if (baseType.Name == typeof(EditableAdapter<>).Name 
@@ -43,31 +42,25 @@ namespace EditableBindings
             return new PropertyDescriptorCollection(_context.PropertyDescriptors.ToArray());
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Returns the properties for this instance of a component using the attribute array as a filter.
         /// </summary>
-        /// <param name="attributes">An array of type <see cref="T:System.Attribute"/> that is used as a filter.</param>
+        /// <param name="attributes">An array of type <see cref="T:System.Attribute" /> that is used as a filter.</param>
         /// <returns>
-        /// A <see cref="T:System.ComponentModel.PropertyDescriptorCollection"/> that represents the filtered properties for this component instance.
+        /// A <see cref="T:System.ComponentModel.PropertyDescriptorCollection" /> that represents the filtered properties for this component instance.
         /// </returns>
         public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
         {
-            List<PropertyDescriptor> descriptors = new List<PropertyDescriptor>();
+            var descriptors = new List<PropertyDescriptor>();
             foreach (PropertyDescriptor descriptor in GetProperties())
             {
-                bool include = true;
-                foreach (Attribute searchAttribute in attributes)
+                foreach (var searchAttribute in attributes)
                 {
-                    if (descriptor.Attributes.Contains(searchAttribute))
-                    {
-                        include = true;
-                        break;
-                    }
+                    if (!descriptor.Attributes.Contains(searchAttribute)) continue;
+                    break;
                 }
-                if (include)
-                {
-                    descriptors.Add(descriptor);
-                }
+                descriptors.Add(descriptor);
             }
             return new PropertyDescriptorCollection(descriptors.ToArray());
         }
